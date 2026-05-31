@@ -17,16 +17,11 @@ pipeline {
                 sh 'mvn test -Dselenium.remote=http://selenium-hub:4444/wd/hub'
             }
         }
-        
-        stage('Allure Report') {
-            steps {
-                allure results: [[path: 'target/allure-results']]
-            }
-        }
     }
-    
+
     post {
         always {
+            allure results: [[path: 'target/allure-results']]
             archiveArtifacts artifacts: '**/target/allure-results/**', allowEmptyArchive: true
         }
     }
