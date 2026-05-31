@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+    
+    tools {
+        maven 'Maven'
+    }
+    
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        
+        stage('Allure Report') {
+            steps {
+                allure id: 'allure', results: [[path: 'target/allure-results']]
+            }
+        }
+    }
+    
+    post {
+        always {
+            archiveArtifacts artifacts: '**/target/allure-results/**', allowEmptyArchive: true
+        }
+    }
+}
