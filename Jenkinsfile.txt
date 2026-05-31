@@ -14,13 +14,13 @@ pipeline {
         
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh 'mvn test -Dselenide.remote=http://selenium-hub:4444/wd/hub'
             }
         }
         
         stage('Allure Report') {
             steps {
-                allure id: 'allure', results: [[path: 'target/allure-results']]
+                allure results: [[path: 'target/allure-results']]
             }
         }
     }
