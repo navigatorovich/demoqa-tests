@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  selenium-hub:
+    image: selenium/hub:4.18.1
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"  # Web UI Grid
+      - "4442:4442"  # Event Bus Publish
+      - "4443:4443"  # Event Bus Subscribe
+    environment:
+      - SE_SESSION_REQUEST_TIMEOUT=60
+      - SE_SESSION_RETRY_INTERVAL=5
+
+  selenium-chrome:
+    image: selenium/node-chrome:4.18.1
+    container_name: selenium-chrome
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=5
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+    shm_size: 2gb
+    # Опционально: ограничиваем ресурсы, чтобы 5 браузеров не убили хост
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '1.0'
+          memory: 1G

@@ -1,0 +1,37 @@
+<configuration>
+    <!-- Консоль -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Файл для каждого теста (через MDC) -->
+    <appender name="TEST_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>target/test-logs/${testName:-unknown}.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Файл для всех ошибок -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>target/test-logs/all-errors.log</file>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="TEST_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+</configuration>
