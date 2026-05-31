@@ -14,7 +14,7 @@ pipeline {
         
         stage('Test') {
             steps {
-                sh 'mvn test -Dselenide.remote=http://selenium-hub:4444/wd/hub'
+                sh 'mvn test -Dselenium.remote=http://selenium-hub:4444/wd/hub'
             }
         }
         

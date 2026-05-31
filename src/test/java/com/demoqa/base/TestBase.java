@@ -32,7 +32,7 @@ public class TestBase {
 
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setBrowserName("chrome");
-        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), caps);
+        String seleniumUrl = System.getProperty("selenium.remote", "http://localhost:4444/wd/hub");
         driver.manage().window().maximize();
         AllureScreenshotListener.setDriver(driver);
 
